@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sockbuster Video & Socks | Be Kind, Rewind & Wear</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Archivo Black / Space Grotesk para estilo videoclub retro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome para iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Mermaid.js para renderizado vectorial local de diagramas UML -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Archivo Black', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            sb: {
+              navy: '#070D1F',
+              blue: '#0E1B3D',
+              card: '#13234D',
+              yellow: '#FFD100',
+              gold: '#F59E0B',
+              cyan: '#00F0FF',
+              pink: '#FF2A85'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Efectos visuales retro VHS / Videoclub 80s-90s */
+    body {
+      background-color: #070D1F;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(255, 209, 0, 0.08) 0%, transparent 40%);
+      color: #F8FAFC;
+      overflow-x: hidden;
+    }
+
+    .ticket-border {
+      background: linear-gradient(135deg, #0E1B3D 0%, #13234D 100%);
+      border: 2px solid #FFD100;
+      box-shadow: 6px 6px 0px #FFD100;
+    }
+
+    .ticket-btn {
+      transition: all 0.15s ease;
+      box-shadow: 3px 3px 0px #000000;
+    }
+    .ticket-btn:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #000000;
+    }
+
+    .vhs-scanlines {
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+      );
+      background-size: 100% 4px;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070D1F;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E3A8A;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FFD100;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-sb-yellow selection:text-sb-navy">
+
+  <!-- ==================== NAVBAR SUPERIOR ==================== -->
+  <header class="sticky top-0 z-40 bg-sb-navy/95 backdrop-blur-md border-b-2 border-sb-yellow/80 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo Estilo Ticket Videoclub -->
+        <button onclick="navegarA('inicio')" class="flex items-center gap-3 group text-left focus:outline-none">
+          <div class="relative bg-sb-blue border-2 border-sb-yellow px-3 py-1.5 rounded-lg transform -rotate-2 group-hover:rotate-0 transition-transform shadow-[3px_3px_0px_#FFD100]">
+            <span class="font-display text-sb-yellow text-lg sm:text-xl tracking-wider leading-none block">SOCKBUSTER</span>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-sb-cyan block text-center">VIDEO & SOCKS</span>
+          </div>
+          <div class="hidden md:block">
+            <span class="text-xs font-mono text-slate-400 block">BE KIND, REWIND</span>
+            <span class="text-xs font-bold text-sb-yellow">EST. 1989</span>
+          </div>
+        </button>
+
+        <!-- Navegación Principal (Inicio / Catálogo / Arquitectura UML) -->
+        <nav class="flex items-center gap-1.5 sm:gap-3">
+          <button id="nav-inicio" onclick="navegarA('inicio')" class="px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 bg-sb-yellow text-sb-navy">
+            <i class="fa-solid fa-house"></i>
+            <span>Inicio</span>
+          </button>
+          <button id="nav-catalogo" onclick="navegarA('catalogo')" class="px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 text-slate-300 hover:text-white hover:bg-sb-card">
+            <i class="fa-solid fa-socks"></i>
+            <span>Catálogo</span>
+          </button>
+          <button id="nav-diagramas" onclick="navegarA('diagramas')" class="px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 text-slate-300 hover:text-white hover:bg-sb-card">
+            <i class="fa-solid fa-diagram-project"></i>
+            <span class="hidden sm:inline">Arquitectura UML</span>
+            <span class="sm:hidden">4+1 UML</span>
+          </button>
+        </nav>
+
+        <!-- Botón Carrito (Drawer Trigger) -->
+        <button onclick="toggleCarrito(true)" class="relative flex items-center gap-2.5 bg-sb-card hover:bg-blue-900 border-2 border-sb-cyan/70 text-white px-3.5 sm:px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+          <i class="fa-solid fa-cart-shopping text-sb-cyan text-base"></i>
+          <span class="hidden sm:inline">Carrito</span>
+          <span id="cart-badge" class="bg-sb-yellow text-sb-navy font-mono font-extrabold text-xs px-2 py-0.5 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== CONTENEDOR NOTIFICACIONES TOAST ==================== -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ==================== CONTENIDO PRINCIPAL SPA ==================== -->
+  <main class="flex-grow">
+
+    <!-- ==================== VISTA 1: INICIO (PORTADA) ==================== -->
+    <section id="vista-inicio" class="animate-fade-in">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden border-b border-blue-900/60">
+        <div class="absolute inset-0 vhs-scanlines pointer-events-none opacity-40"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <!-- Columna Texto Hero -->
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sb-blue border border-sb-cyan/50 text-sb-cyan text-xs font-mono uppercase tracking-wider">
+                <span class="w-2 h-2 rounded-full bg-sb-cyan animate-ping"></span>
+                Edición Limitada • Cultura Pop & Cine de Culto
+              </div>
+
+              <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl text-white leading-tight tracking-tight">
+                TUS PELÍCULAS FAVORITAS AHORA EN <span class="text-sb-yellow underline decoration-sb-pink decoration-4 underline-offset-8">TUS PIES</span>
+              </h1>
+
+              <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                Bienvenido a <strong class="text-sb-yellow">Sockbuster Video & Socks</strong>. Revive la magia de los videoclubs de los 80s y 90s con nuestra colección exclusiva de calcetines tejidos en algodón peinado de alta densidad, inspirados en clásicos de ciencia ficción, terror ochentero, dramas de culto y animación retro.
+              </p>
+
+              <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                <button onclick="navegarA('catalogo')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-sb-yellow hover:bg-yellow-300 text-sb-navy font-display text-base tracking-wide ticket-btn flex items-center justify-center gap-3">
+                  <i class="fa-solid fa-film"></i>
+                  EXPLORAR CATÁLOGO
+                </button>
+                <button onclick="navegarAColeccion('Terror 80s')" class="w-full sm:w-auto px-6 py-4 rounded-xl bg-sb-card hover:bg-blue-900 border border-blue-700 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-ghost text-sb-pink"></i>
+                  Especial Terror 80s
+                </button>
+              </div>
+            </div>
+
+            <!-- Columna Tarjeta Visual VHS / Ticket -->
+            <div class="lg:col-span-5">
+              <div class="ticket-border rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="flex justify-between items-start border-b-2 border-dashed border-sb-yellow/40 pb-4 mb-5">
+                  <div>
+                    <span class="text-xs font-mono text-sb-cyan uppercase">TARJETA DE MEMBRESÍA</span>
+                    <h2 class="font-display text-2xl text-sb-yellow mt-0.5">SOCKBUSTER VIP</h2>
+                  </div>
+                  <div class="bg-sb-yellow text-sb-navy font-mono font-bold text-xs px-2.5 py-1 rounded">
+                    VHS-1989
+                  </div>
+                </div>
+
+                <!-- Ilustración SVG Estilizada Calcetín + Cinta VHS -->
+                <div class="bg-sb-navy/80 rounded-xl p-5 border border-blue-800/80 flex items-center justify-center my-4">
+                  <svg viewBox="0 0 260 150" class="w-full max-w-[240px] h-auto drop-shadow-[0_0_12px_rgba(255,209,0,0.3)]">
+                    <!-- Cinta VHS Fondo -->
+                    <rect x="15" y="25" width="150" height="95" rx="8" fill="#1E293B" stroke="#00F0FF" stroke-width="2.5"/>
+                    <rect x="28" y="38" width="124" height="24" rx="4" fill="#FFD100"/>
+                    <text x="90" y="54" font-family="monospace" font-weight="bold" font-size="11" fill="#070D1F" text-anchor="middle">SOCKBUSTER HIT</text>
+                    <circle cx="55" cy="88" r="16" fill="#070D1F" stroke="#94A3B8" stroke-width="2"/>
+                    <circle cx="55" cy="88" r="6" fill="#FFD100"/>
+                    <circle cx="125" cy="88" r="16" fill="#070D1F" stroke="#94A3B8" stroke-width="2"/>
+                    <circle cx="125" cy="88" r="6" fill="#FFD100"/>
+                    <rect x="78" y="76" width="24" height="24" rx="2" fill="#0F172A" stroke="#475569"/>
+                    <!-- Calcetín Retro Protagonista -->
+                    <g transform="translate(145, 10) rotate(12)">
+                      <path d="M25,10 L65,10 L65,75 C65,92 55,105 38,112 L15,120 C4,123 -5,114 -2,102 C1,92 10,86 25,80 Z" fill="#FF2A85" stroke="#FFFFFF" stroke-width="3"/>
+                      <rect x="25" y="10" width="40" height="14" fill="#FFD100"/>
+                      <line x1="25" y1="32" x2="65" y2="32" stroke="#00F0FF" stroke-width="4"/>
+                      <line x1="25" y1="42" x2="65" y2="42" stroke="#FFD100" stroke-width="4"/>
+                      <path d="M-2,102 C4,96 12,104 15,120 L10,121 C1,122 -5,113 -2,102 Z" fill="#00F0FF"/>
+                    </g>
+                  </svg>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center pt-2 font-mono text-xs">
+                  <div class="bg-sb-navy/70 p-2.5 rounded-lg border border-blue-900">
+                    <span class="block text-sb-yellow font-bold text-base">4</span>
+                    <span class="text-slate-400">Colecciones</span>
+                  </div>
+                  <div class="bg-sb-navy/70 p-2.5 rounded-lg border border-blue-900">
+                    <span class="block text-sb-cyan font-bold text-base">100%</span>
+                    <span class="text-slate-400">Algodón</span>
+                  </div>
+                  <div class="bg-sb-navy/70 p-2.5 rounded-lg border border-blue-900">
+                    <span class="block text-sb-pink font-bold text-base">24/7</span>
+                    <span class="text-slate-400">Envíos CL</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Colecciones Destacadas -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+          <div>
+            <span class="text-sb-cyan font-mono text-xs uppercase tracking-widest">ESTANTERÍAS TEMÁTICAS</span>
+            <h2 class="font-display text-2xl sm:text-3xl text-white mt-1">EXPLORA POR GÉNERO</h2>
+          </div>
+          <button onclick="navegarA('catalogo')" class="text-sb-yellow hover:underline font-semibold text-sm flex items-center gap-1.5">
+            Ver todos los modelos <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div id="home-collections-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Renderizado dinámico de colecciones desde la clase Coleccion -->
+        </div>
+      </div>
+
+      <!-- Ficha Académica / Créditos del Desarrollador (Requisito Obligatorio Portada) -->
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div class="bg-sb-card/90 border-2 border-sb-cyan/40 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 bg-sb-cyan text-sb-navy font-mono font-bold text-xs px-4 py-1 rounded-bl-xl">
+            ARQUITECTURA 4+1 • UML
+          </div>
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <div class="w-16 h-16 rounded-2xl bg-sb-blue border-2 border-sb-yellow flex items-center justify-center text-sb-yellow text-2xl shrink-0 shadow-[3px_3px_0px_#FFD100]">
+              <i class="fa-solid fa-code"></i>
+            </div>
+            <div class="text-center md:text-left space-y-1.5">
+              <span class="text-xs font-mono uppercase tracking-wider text-sb-cyan">Proyecto Desarrollado Por:</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-white">Matías Ignacio Garrido Kremer</h3>
+              <p class="text-sm sm:text-base text-sb-yellow font-semibold">
+                Ingeniería en Informática / Analista Programador — INACAP Punta Arenas
+              </p>
+              <p class="text-xs text-slate-400 pt-1">
+                Asignatura: Modelamiento de Soluciones Informáticas (TI3025) • Implementación basada en el Paradigma 4+1 de Vistas UML (Entidades: <code class="text-sb-cyan">Coleccion</code>, <code class="text-sb-cyan">Producto</code>, <code class="text-sb-cyan">ItemCarrito</code>, <code class="text-sb-cyan">Pedido</code>, <code class="text-sb-cyan">Resena</code>).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VISTA 2: CATÁLOGO INTERACTIVO (RF01) ==================== -->
+    <section id="vista-catalogo" class="hidden animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      
+      <!-- Encabezado Catálogo -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-blue-900/80">
+        <div>
+          <span class="text-xs font-mono text-sb-yellow uppercase tracking-widest">RF01 • CATÁLOGO OFICIAL</span>
+          <h1 class="font-display text-3xl sm:text-4xl text-white mt-1">COLECCIÓN DE CALCETINES</h1>
+        </div>
+        <div class="flex items-center gap-3 text-xs font-mono text-slate-300 bg-sb-card px-4 py-2.5 rounded-xl border border-blue-800">
+          <i class="fa-solid fa-box-open text-sb-cyan"></i>
+          <span>Mostrando <strong id="productos-count" class="text-sb-yellow">0</strong> modelos disponibles</span>
+        </div>
+      </div>
+
+      <!-- Barra de Búsqueda en Tiempo Real y Filtros por Colección -->
+      <div class="my-6 space-y-4">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          <!-- Buscador -->
+          <div class="lg:col-span-5 relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input 
+              type="text" 
+              id="buscador-input" 
+              oninput="filtrarCatalogo()"
+              placeholder="Buscar por película, serie o diseño..." 
+              class="w-full bg-sb-card border-2 border-blue-800 focus:border-sb-yellow rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-slate-400 focus:outline-none transition-colors"
+            />
+          </div>
+
+          <!-- Botones de Filtro por Colección -->
+          <div id="filtros-coleccion-container" class="lg:col-span-7 flex flex-wrap items-center gap-2">
+            <!-- Generados dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Grilla de Productos -->
+      <div id="catalogo-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
+        <!-- Tarjetas de Producto generadas desde JS -->
+      </div>
+
+      <!-- Estado Vacío de Búsqueda -->
+      <div id="catalogo-vacio" class="hidden text-center py-16 bg-sb-card/50 rounded-2xl border border-dashed border-blue-800 my-6">
+        <i class="fa-solid fa-compact-disc text-5xl text-slate-500 mb-4 animate-spin"></i>
+        <h3 class="text-xl font-bold text-white">No encontramos esa cinta en el estante</h3>
+        <p class="text-slate-400 text-sm mt-1">Intenta buscar con otro término o selecciona "Todas las Colecciones".</p>
+        <button onclick="resetearFiltros()" class="mt-4 px-5 py-2.5 rounded-xl bg-sb-yellow text-sb-navy font-bold text-sm">
+          Limpiar filtros
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== VISTA 3: ARQUITECTURA UML - PARADIGMA 4+1 (diagramas.html) ==================== -->
+    <section id="vista-diagramas" class="hidden animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      
+      <!-- Encabezado de Documentación Técnica -->
+      <div class="border-b-2 border-sb-yellow/50 pb-6 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sb-blue border border-sb-cyan/50 text-sb-cyan text-xs font-mono uppercase tracking-wider">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Documentación Técnica • Criterios 2.1.1 — 2.1.6</span>
+          </div>
+          <h1 class="font-display text-3xl sm:text-4xl text-white tracking-tight">
+            ARQUITECTURA DE SOFTWARE <span class="text-sb-yellow">PARADIGMA 4+1</span>
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+            Especificación arquitectónica de <strong class="text-sb-yellow">Sockbuster Video & Socks</strong> bajo el modelo de Philippe Kruchten, articulando los Requerimientos Funcionales (<code class="text-sb-cyan">RF01-RF04</code>) y No Funcionales (<code class="text-sb-cyan">RNF01-RNF02</code>) mediante diagramas UML estandarizados y código declarativo PlantUML.
+          </p>
+        </div>
+
+        <!-- Índice Rápido de las 5 Vistas -->
+        <div class="flex flex-wrap gap-2">
+          <a href="#vista-41-logica" class="px-3 py-1.5 rounded-lg bg-sb-card hover:bg-blue-900 border border-blue-700 text-xs font-mono text-sb-cyan transition-colors">1. Lógica</a>
+          <a href="#vista-41-desarrollo" class="px-3 py-1.5 rounded-lg bg-sb-card hover:bg-blue-900 border border-blue-700 text-xs font-mono text-sb-cyan transition-colors">2. Desarrollo</a>
+          <a href="#vista-41-procesos" class="px-3 py-1.5 rounded-lg bg-sb-card hover:bg-blue-900 border border-blue-700 text-xs font-mono text-sb-cyan transition-colors">3. Procesos</a>
+          <a href="#vista-41-fisica" class="px-3 py-1.5 rounded-lg bg-sb-card hover:bg-blue-900 border border-blue-700 text-xs font-mono text-sb-cyan transition-colors">4. Física</a>
+          <a href="#vista-41-escenarios" class="px-3 py-1.5 rounded-lg bg-sb-card hover:bg-blue-900 border border-blue-700 text-xs font-mono text-sb-yellow transition-colors">5. Escenarios</a>
+        </div>
+      </div>
+
+      <!-- Contenedor Dinámico de las 5 Vistas 4+1 -->
+      <div id="contenedor-vistas-uml" class="space-y-10">
+        <!-- Inyectado y renderizado por JavaScript + Mermaid -->
+      </div>
+
+      <!-- Matriz de Trazabilidad RF / RNF vs Modelo 4+1 (Criterio 2.1.1) -->
+      <div class="bg-sb-card/95 border-2 border-sb-yellow/70 rounded-2xl overflow-hidden shadow-2xl">
+        <div class="p-6 bg-sb-blue border-b border-blue-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-mono text-sb-yellow uppercase tracking-widest">CRITERIO 2.1.1 • MATRIZ DE TRAZABILIDAD</span>
+            <h2 class="font-display text-xl sm:text-2xl text-white mt-0.5">VINCULACIÓN DE REQUERIMIENTOS CON VISTAS 4+1</h2>
+          </div>
+          <span class="px-3 py-1 rounded-lg bg-sb-navy border border-sb-cyan/40 text-sb-cyan font-mono text-xs self-start sm:self-auto">
+            4 RF + 2 RNF Cubiertos
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-sb-navy/90 text-sb-yellow font-mono uppercase text-xs border-b border-blue-800">
+                <th class="py-3.5 px-4">Código</th>
+                <th class="py-3.5 px-4">Requerimiento del Negocio</th>
+                <th class="py-3.5 px-4">Vistas 4+1 Impactadas</th>
+                <th class="py-3.5 px-4">Artefactos / Implementación Web</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-blue-900/70 text-slate-200">
+              <tr class="hover:bg-blue-950/50 transition-colors">
+                <td class="py-3.5 px-4 font-mono font-bold text-sb-cyan whitespace-nowrap">RF01</td>
+                <td class="py-3.5 px-4"><strong>Catálogo por Colecciones Temáticas:</strong> Exploración y filtrado por categoría, foto, precio, stock y tallas.</td>
+                <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-blue-950 border border-blue-700 text-xs font-mono">Lógica, Desarrollo, Escenarios</span></td>
+                <td class="py-3.5 px-4 text-slate-300">Clases <code class="text-sb-yellow">Coleccion</code> y <code class="text-sb-yellow">Producto</code>; módulo <code class="text-sb-cyan">Gestor de Catálogo y Filtros</code>.</td>
+              </tr>
+              <tr class="hover:bg-blue-950/50 transition-colors">
+                <td class="py-3.5 px-4 font-mono font-bold text-sb-cyan whitespace-nowrap">RF02</td>
+                <td class="py-3.5 px-4"><strong>Carrito y Gestión de Pedidos:</strong> Agregar ítems, modificar cantidades, validar stock y simular checkout con ID único.</td>
+                <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-blue-950 border border-blue-700 text-xs font-mono">Lógica, Procesos, Escenarios</span></td>
+                <td class="py-3.5 px-4 text-slate-300">Clases <code class="text-sb-yellow">ItemCarrito</code> y <code class="text-sb-yellow">Pedido</code>; secuencia síncrona de checkout (<code class="text-sb-cyan">SB-2026-XXXX</code>).</td>
+              </tr>
+              <tr class="hover:bg-blue-950/50 transition-colors">
+                <td class="py-3.5 px-4 font-mono font-bold text-sb-cyan whitespace-nowrap">RF03</td>
+                <td class="py-3.5 px-4"><strong>Administración de Inventario:</strong> Registrar modelos, asociar película/serie, actualizar stock y modificar precios.</td>
+                <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-blue-950 border border-blue-700 text-xs font-mono">Lógica, Desarrollo, Escenarios</span></td>
+                <td class="py-3.5 px-4 text-slate-300">Subclase <code class="text-sb-yellow">Administrador</code> (<code class="text-sb-cyan">gestionarInventario()</code>, <code class="text-sb-cyan">actualizarStock()</code>) y endpoints API REST.</td>
+              </tr>
+              <tr class="hover:bg-blue-950/50 transition-colors">
+                <td class="py-3.5 px-4 font-mono font-bold text-sb-cyan whitespace-nowrap">RF04</td>
+                <td class="py-3.5 px-4"><strong>Gestión de Reseñas de Fanáticos:</strong> Valoraciones de 1 a 5 estrellas y comentarios en la ficha de cada producto.</td>
+                <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-blue-950 border border-blue-700 text-xs font-mono">Lógica, Escenarios</span></td>
+                <td class="py-3.5 px-4 text-slate-300">Clase <code class="text-sb-yellow">Resena</code> vinculada a <code class="text-sb-yellow">Cliente</code> y <code class="text-sb-yellow">Producto</code>; modal interactivo de reseñas.</td>
+              </tr>
+              <tr class="hover:bg-blue-950/50 transition-colors">
+                <td class="py-3.5 px-4 font-mono font-bold text-sb-pink whitespace-nowrap">RNF01</td>
+                <td class="py-3.5 px-4"><strong>Disponibilidad y Despliegue en la Nube:</strong> Carga inicial óptima (&lt;2s) y hosting público accesible vía web.</td>
+                <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-pink-950/50 border border-pink-700 text-xs font-mono">Desarrollo, Física</span></td>
+                <td class="py-3.5 px-4 text-slate-300">Arquitectura estática desacoplada desplegada en GitHub Pages / Vercel / Netlify con assets SVG ligeros.</td>
+              </tr>
+              <tr class="hover:bg-blue-950/50 transition-colors">
+                <td class="py-3.5 px-4 font-mono font-bold text-sb-pink whitespace-nowrap">RNF02</td>
+                <td class="py-3.5 px-4"><strong>Seguridad en Acceso y Autenticación:</strong> Comunicación cifrada HTTPS y autenticación mediante tokens JWT.</td>
+                <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-pink-950/50 border border-pink-700 text-xs font-mono">Desarrollo, Física, Escenarios</span></td>
+                <td class="py-3.5 px-4 text-slate-300"><code class="text-sb-cyan">Middleware Autenticación JWT</code>, <code class="text-sb-cyan">Controlador JWT Auth</code> y transporte TLS/HTTPS extremo a extremo.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-sb-navy border-t border-blue-900/80 py-8 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="font-display text-sb-yellow text-sm">SOCKBUSTER</span>
+        <span>• Video & Socks E-Commerce</span>
+      </div>
+      <p class="text-center">
+        Desarrollado por <span class="text-slate-200 font-semibold">Matías Ignacio Garrido Kremer</span> • INACAP Punta Arenas
+      </p>
+      <div class="font-mono text-sb-cyan">
+        UML 4+1 SPA v1.0
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== DRAWER LATERAL: CARRITO DE COMPRAS (RF02) ==================== -->
+  <div id="carrito-overlay" onclick="toggleCarrito(false)" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"></div>
+  <aside id="carrito-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-sb-navy border-l-2 border-sb-yellow z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+    
+    <!-- Header Drawer -->
+    <div class="p-5 bg-sb-blue border-b border-blue-800 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <i class="fa-solid fa-cart-shopping text-sb-yellow text-xl"></i>
+        <div>
+          <h2 class="font-display text-lg text-white tracking-wide">TU CESTA DE RENTA</h2>
+          <span class="text-[11px] font-mono text-sb-cyan">RF02 • Gestión de Pedido</span>
+        </div>
+      </div>
+      <button onclick="toggleCarrito(false)" class="w-9 h-9 rounded-lg bg-sb-card hover:bg-red-500/20 text-slate-300 hover:text-red-400 flex items-center justify-center transition-colors">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Lista de ItemCarrito -->
+    <div id="carrito-items-container" class="flex-grow overflow-y-auto p-5 space-y-4">
+      <!-- Renderizado dinámico -->
+    </div>
+
+    <!-- Footer Carrito y Checkout -->
+    <div class="p-5 bg-sb-blue border-t-2 border-sb-yellow/50 space-y-4">
+      <div class="space-y-1.5 text-sm">
+        <div class="flex justify-between text-slate-400">
+          <span>Subtotal neto:</span>
+          <span id="cart-subtotal" class="font-mono">$0</span>
+        </div>
+        <div class="flex justify-between text-slate-400">
+          <span>Envío estándar Chile:</span>
+          <span class="font-mono text-sb-cyan">GRATIS</span>
+        </div>
+        <div class="flex justify-between text-lg font-extrabold text-white pt-2 border-t border-blue-800">
+          <span>TOTAL A PAGAR:</span>
+          <span id="cart-total" class="font-mono text-sb-yellow">$0</span>
+        </div>
+      </div>
+
+      <button 
+        id="btn-checkout" 
+        onclick="ejecutarCheckout()" 
+        disabled
+        class="w-full py-3.5 rounded-xl bg-sb-yellow hover:bg-yellow-300 disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed text-sb-navy font-display text-base tracking-wide ticket-btn flex items-center justify-center gap-2"
+      >
+        <i class="fa-solid fa-receipt"></i>
+        SIMULAR CHECKOUT
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================== MODAL: COMPROBANTE DE PEDIDO (RF02) ==================== -->
+  <div id="modal-pedido" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-sb-navy border-2 border-sb-yellow rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-[0_0_40px_rgba(255,209,0,0.25)] animate-fade-in relative">
+      <div class="text-center border-b-2 border-dashed border-sb-yellow/50 pb-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 text-emerald-400 flex items-center justify-center text-2xl mx-auto mb-3">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <span class="text-xs font-mono text-sb-cyan uppercase">COMPROBANTE OFICIAL</span>
+        <h3 class="font-display text-2xl text-white mt-0.5">¡PEDIDO CONFIRMADO!</h3>
+        <p class="text-xs text-slate-400 mt-1">Tu orden ha sido procesada y el stock actualizado.</p>
+      </div>
+
+      <div id="pedido-detalle-contenido" class="py-4 space-y-3 text-sm">
+        <!-- Detalle del objeto Pedido -->
+      </div>
+
+      <button onclick="cerrarModalPedido()" class="w-full mt-2 py-3 rounded-xl bg-sb-yellow hover:bg-yellow-300 text-sb-navy font-display text-sm tracking-wider ticket-btn">
+        VOLVER A LA TIENDA
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: DETALLES Y RESEÑAS DE FANÁTICOS (RF04) ==================== -->
+  <div id="modal-resenas" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-sb-navy border-2 border-sb-cyan/70 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl animate-fade-in overflow-hidden">
+      
+      <!-- Header Modal -->
+      <div class="p-5 bg-sb-blue border-b border-blue-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="bg-sb-pink text-white font-mono font-bold text-xs px-2.5 py-1 rounded">RF04 • FAN REVIEWS</span>
+          <h3 id="modal-resena-titulo" class="font-bold text-lg text-white truncate">Detalles del Producto</h3>
+        </div>
+        <button onclick="cerrarModalResenas()" class="w-9 h-9 rounded-lg bg-sb-card hover:bg-red-500/20 text-slate-300 hover:text-red-400 flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Cuerpo Scrollable -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-6">
+        <!-- Resumen del Producto -->
+        <div id="modal-resena-producto-info" class="flex flex-col sm:flex-row items-center gap-5 bg-sb-card/70 p-4 rounded-xl border border-blue-800">
+          <!-- Info inyectada por JS -->
+        </div>
+
+        <!-- Formulario Nueva Reseña -->
+        <form id="form-nueva-resena" onsubmit="enviarResena(event)" class="bg-sb-blue/60 p-4 rounded-xl border border-blue-800/80 space-y-3">
+          <h4 class="font-bold text-sm text-sb-yellow flex items-center gap-2">
+            <i class="fa-solid fa-star"></i> Publicar tu valoración de fanático
+          </h4>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-slate-300 mb-1">Tu Nombre / Alias</label>
+              <input type="text" id="resena-autor" required placeholder="Ej. Marty McFly" class="w-full bg-sb-navy border border-blue-700 focus:border-sb-cyan rounded-lg px-3 py-2 text-sm text-white focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-300 mb-1">Calificación (1 a 5 estrellas)</label>
+              <select id="resena-calificacion" class="w-full bg-sb-navy border border-blue-700 focus:border-sb-cyan rounded-lg px-3 py-2 text-sm text-sb-yellow font-bold focus:outline-none">
+                <option value="5">★★★★★ (5/5 - Obra Maestra)</option>
+                <option value="4">★★★★☆ (4/5 - Muy Recomendado)</option>
+                <option value="3">★★★☆☆ (3/5 - Entretenido)</option>
+                <option value="2">★★☆☆☆ (2/5 - Regular)</option>
+                <option value="1">★☆☆☆☆ (1/5 - Decepcionante)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Tu Comentario</label>
+            <textarea id="resena-comentario" rows="2" required placeholder="¿Qué te pareció el diseño y la calidad del tejido?" class="w-full bg-sb-navy border border-blue-700 focus:border-sb-cyan rounded-lg px-3 py-2 text-sm text-white focus:outline-none"></textarea>
+          </div>
+
+          <div class="flex justify-end">
+            <button type="submit" class="px-5 py-2 rounded-lg bg-sb-cyan hover:bg-cyan-300 text-sb-navy font-bold text-xs uppercase tracking-wider transition-colors">
+              Publicar Reseña
+            </button>
+          </div>
+        </form>
+
+        <!-- Listado de Reseñas Existentes -->
+        <div>
+          <h4 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
+            <span>Opiniones de la Comunidad</span>
+            <span id="modal-resena-contador" class="text-xs font-mono text-sb-cyan">0 reseñas</span>
+          </h4>
+          <div id="lista-resenas-container" class="space-y-3">
+            <!-- Reseñas renderizadas -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LÓGICA DE APLICACIÓN (CLASES UML & CONTROLADOR SPA) ==================== -->
+  <script>
+    // =========================================================================
+    // 1. DEFINICIÓN DE CLASES DEL DOMINIO UML (VISTA LÓGICA)
+    // =========================================================================
+    class Coleccion {
+      constructor(id_coleccion, nombre, descripcion, icono, colorBadge) {
+        this.id_coleccion = id_coleccion;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.icono = icono;
+        this.colorBadge = colorBadge;
+      }
+    }
+
+    class Producto {
+      constructor(id_producto, nombre, precio, stock, talla, imagen_url, id_coleccion, peliculaRef) {
+        this.id_producto = id_producto;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.talla = Array.isArray(talla) ? talla : ['S', 'M', 'L'];
+        this.imagen_url = imagen_url;
+        this.id_coleccion = id_coleccion;
+        this.peliculaRef = peliculaRef;
+      }
+    }
+
+    class ItemCarrito {
+      constructor(id_item, producto, cantidad, tallaSeleccionada) {
+        this.id_item = id_item;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.tallaSeleccionada = tallaSeleccionada;
+      }
+
+      subtotal() {
+        return this.producto.precio * this.cantidad;
+      }
+    }
+
+    class Pedido {
+      constructor(id_pedido, itemsCarrito) {
+        this.id_pedido = id_pedido;
+        this.identificador_unico = `SB-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+        this.items = itemsCarrito.map(item => ({
+          nombre: item.producto.nombre,
+          talla: item.tallaSeleccionada,
+          cantidad: item.cantidad,
+          precioUnitario: item.producto.precio,
+          subtotal: item.subtotal()
+        }));
+        this.total = itemsCarrito.reduce((acc, item) => acc + item.subtotal(), 0);
+        this.estado = 'CONFIRMADO';
+        this.fecha = new Date();
+      }
+
+      procesarCheckout(itemsCarrito) {
+        itemsCarrito.forEach(item => {
+          if (item.producto.stock >= item.cantidad) {
+            item.producto.stock -= item.cantidad;
+          }
+        });
+        this.estado = 'PAGADO Y PREPARANDO ENVÍO';
+        return this.identificador_unico;
+      }
+    }
+
+    class Resena {
+      constructor(id_resena, id_producto, autor, calificacion, comentario, fecha = new Date()) {
+        this.id_resena = id_resena;
+        this.id_producto = id_producto;
+        this.autor = autor;
+        this.calificacion = Number(calificacion);
+        this.comentario = comentario;
+        this.fecha = fecha;
+      }
+    }
+
+    // =========================================================================
+    // 2. GENERADOR DE ILUSTRACIONES SVG PARA CALCETINES TEMÁTICOS
+    // =========================================================================
+    function crearSvgCalcetin(bgStart, bgEnd, sockMain, sockAccent, cuffColor, symbolType) {
+      let simbolo = '';
+      if (symbolType === 'bolt') {
+        simbolo = '<polygon points="152,65 140,88 150,88 144,108 162,82 151,82" fill="#FFD100" stroke="#070D1F" stroke-width="1.5"/>';
+      } else if (symbolType === 'alien') {
+        simbolo = '<ellipse cx="150" cy="84" rx="11" ry="14" fill="#10B981"/><circle cx="146" cy="82" r="2.5" fill="#070D1F"/><circle cx="154" cy="82" r="2.5" fill="#070D1F"/>';
+      } else if (symbolType === 'ghost') {
+        simbolo = '<path d="M140,95 L140,80 A10,10 0 0,1 160,80 L160,95 L155,91 L150,95 L145,91 Z" fill="#FFFFFF"/><circle cx="147" cy="80" r="2" fill="#070D1F"/><circle cx="153" cy="80" r="2" fill="#070D1F"/>';
+      } else if (symbolType === 'slash') {
+        simbolo = '<line x1="140" y1="72" x2="160" y2="96" stroke="#EF4444" stroke-width="3.5" stroke-linecap="round"/><line x1="146" y1="70" x2="164" y2="92" stroke="#EF4444" stroke-width="3.5" stroke-linecap="round"/>';
+      } else if (symbolType === 'flask') {
+        simbolo = '<path d="M146,72 L154,72 L154,78 L161,94 L139,94 L146,78 Z" fill="#00F0FF" stroke="#FFFFFF" stroke-width="1.5"/>';
+      } else if (symbolType === 'crown') {
+        simbolo = '<polygon points="139,92 141,77 146,84 150,74 154,84 159,77 161,92" fill="#FFD100"/>';
+      } else if (symbolType === 'donut') {
+        simbolo = '<circle cx="150" cy="84" r="11" fill="#FF2A85" stroke="#FDE047" stroke-width="2"/><circle cx="150" cy="84" r="4" fill="' + sockMain + '"/>';
+      } else {
+        simbolo = '<polygon points="150,71 153,80 162,80 155,86 158,95 150,89 142,95 145,86 138,80 147,80" fill="#FFD100"/>';
+      }
+
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 250">
+          <defs>
+            <linearGradient id="g_${symbolType}_${sockMain.replace('#','')}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${bgStart}"/>
+              <stop offset="100%" stop-color="${bgEnd}"/>
+            </linearGradient>
+          </defs>
+          <rect width="300" height="250" fill="url(#g_${symbolType}_${sockMain.replace('#','')})"/>
+          <circle cx="150" cy="125" r="88" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="6 6"/>
+          <g transform="translate(15, 8)">
+            <path d="M125,35 L172,35 L172,135 C172,158 158,175 135,184 L102,196 C86,201 73,189 77,173 C81,158 95,150 125,140 Z"
+                  fill="${sockMain}" stroke="#FFFFFF" stroke-width="3.5" stroke-linejoin="round"/>
+            <rect x="125" y="35" width="47" height="20" fill="${cuffColor}" stroke="#FFFFFF" stroke-width="2"/>
+            <line x1="125" y1="62" x2="172" y2="62" stroke="${sockAccent}" stroke-width="4"/>
+            <path d="M172,118 C158,120 152,132 158,146 C165,141 170,131 172,118 Z" fill="${sockAccent}"/>
+            <path d="M77,173 C86,165 98,175 102,196 L94,198 C81,199 73,187 77,173 Z" fill="${sockAccent}"/>
+            ${simbolo}
+          </g>
+        </svg>
+      `.trim();
+
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    // =========================================================================
+    // 3. DATOS INICIALES DEL CATÁLOGO (10 MODELOS EN 4 COLECCIONES)
+    // =========================================================================
+    const colecciones = [
+      new Coleccion(
+        1,
+        'Ciencia Ficción',
+        'Viajes en el tiempo, naves espaciales y futuros distópicos tejidos con hilos neón.',
+        'fa-rocket',
+        'bg-cyan-500/20 text-sb-cyan border-sb-cyan/50'
+      ),
+      new Coleccion(
+        2,
+        'Terror 80s',
+        'Clásicos del cine slasher, criaturas nocturnas y cintas prohibidas de videoclub.',
+        'fa-ghost',
+        'bg-pink-500/20 text-sb-pink border-sb-pink/50'
+      ),
+      new Coleccion(
+        3,
+        'Series de Drama',
+        'Homenajes a las series de culto que marcaron la televisión moderna.',
+        'fa-tv',
+        'bg-amber-500/20 text-sb-yellow border-sb-yellow/50'
+      ),
+      new Coleccion(
+        4,
+        'Animación',
+        'Colores vibrantes e íconos inolvidables de la animación retro y de culto.',
+        'fa-wand-magic-sparkles',
+        'bg-emerald-500/20 text-emerald-300 border-emerald-400/50'
+      )
+    ];
+
+    const productos = [
+      new Producto(
+        101,
+        'DeLorean 88 MPH Flux',
+        9990,
+        14,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#0B192C', '#1E3E62', '#1D4ED8', '#00F0FF', '#FFD100', 'bolt'),
+        1,
+        'Inspirado en Back to the Future (1985)'
+      ),
+      new Producto(
+        102,
+        'Nostromo Xenomorph Crew',
+        10990,
+        8,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#090D16', '#1F2937', '#111827', '#10B981', '#34D399', 'alien'),
+        1,
+        'Inspirado en Alien: El Octavo Pasajero (1979)'
+      ),
+      new Producto(
+        103,
+        'Replicant Tears 2019',
+        10490,
+        6,
+        ['M', 'L'],
+        crearSvgCalcetin('#1E1B4B', '#312E81', '#4338CA', '#FF2A85', '#00F0FF', 'star'),
+        1,
+        'Inspirado en Blade Runner (1982)'
+      ),
+      new Producto(
+        104,
+        'Camp Crystal Lake 1980',
+        9490,
+        11,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#1F090D', '#450A0A', '#991B1B', '#F8FAFC', '#EF4444', 'slash'),
+        2,
+        'Inspirado en Viernes 13 (1980)'
+      ),
+      new Producto(
+        105,
+        'Elm Street Nightmare Stripes',
+        9990,
+        4,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#18181B', '#3F1D2E', '#7F1D1D', '#15803D', '#DC2626', 'slash'),
+        2,
+        'Inspirado en Pesadilla en Elm Street (1984)'
+      ),
+      new Producto(
+        106,
+        'Who You Gonna Sock?',
+        10990,
+        15,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#0F172A', '#1E293B', '#334155', '#22C55E', '#EF4444', 'ghost'),
+        2,
+        'Inspirado en Ghostbusters (1984)'
+      ),
+      new Producto(
+        107,
+        'Heisenberg Blue Crystal',
+        11490,
+        9,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#042F2E', '#115E59', '#0F766E', '#00F0FF', '#FACC15', 'flask'),
+        3,
+        'Inspirado en Breaking Bad (2008)'
+      ),
+      new Producto(
+        108,
+        'Hawkins Upside Down',
+        10990,
+        7,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#090D16', '#3B0764', '#581C87', '#FF2A85', '#FFD100', 'bolt'),
+        3,
+        'Inspirado en Stranger Things (2016)'
+      ),
+      new Producto(
+        109,
+        'Springfield Pink Donut',
+        8990,
+        18,
+        ['S', 'M', 'L'],
+        crearSvgCalcetin('#1E3A8A', '#2563EB', '#FACC15', '#FF2A85', '#38BDF8', 'donut'),
+        4,
+        'Inspirado en Los Simpson (1989)'
+      ),
+      new Producto(
+        110,
+        'Cyber Tokyo Neo-Bike',
+        11990,
+        3,
+        ['M', 'L'],
+        crearSvgCalcetin('#2A0818', '#4C0519', '#E11D48', '#FFD100', '#00F0FF', 'crown'),
+        4,
+        'Inspirado en Akira (1988)'
+      )
+    ];
+
+    const resenas = [
+      new Resena(1, 101, 'Marty_McFly85', 5, '¡Increíble calidad! Los colores del condensador de flujo brillan espectacular y el algodón es súper cómodo.'),
+      new Resena(2, 101, 'DocBrown_CL', 5, '1.21 Gigawatts de estilo en los pies. Llegaron súper rápido a Punta Arenas.'),
+      new Resena(3, 104, 'FinalGirl80', 4, 'Perfectos para maratón de películas de terror un viernes por la noche.'),
+      new Resena(4, 107, 'JessePinkman', 5, 'Yeah Science! El detalle del matraz y el color azul cristal están brutales.'),
+      new Resena(5, 109, 'HomeroJ', 5, 'Mmm... calcetines de rosquilla... Excelente elástico y muy suaves.')
+    ];
+
+    // =========================================================================
+    // 4. ESTADO GLOBAL DE LA APLICACIÓN Y UTILIDADES
+    // =========================================================================
+    let carrito = [];
+    let historialPedidos = [];
+    let coleccionSeleccionadaId = 'TODAS';
+    let tallasSeleccionadasPorProducto = {};
+    let contadorItemCarritoId = 1;
+    let contadorResenaId = resenas.length + 1;
+    let productoActivoModalResena = null;
+
+    // Inicializar talla por defecto 'M' para cada producto
+    productos.forEach(p => {
+      tallasSeleccionadasPorProducto[p.id_producto] = p.talla.includes('M') ? 'M' : p.talla[0];
+    });
+
+    function formatearCLP(valor) {
+      return '$' + Number(valor).toLocaleString('es-CL');
+    }
+
+    function mostrarToast(mensaje, tipo = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const colores = {
+        success: 'bg-sb-navy border-emerald-400 text-emerald-300',
+        warning: 'bg-sb-navy border-sb-yellow text-sb-yellow',
+        error: 'bg-sb-navy border-red-500 text-red-400',
+        info: 'bg-sb-navy border-sb-cyan text-sb-cyan'
+      };
+
+      const iconos = {
+        success: 'fa-circle-check',
+        warning: 'fa-triangle-exclamation',
+        error: 'fa-circle-xmark',
+        info: 'fa-circle-info'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl border-2 shadow-xl text-xs font-bold animate-fade-in ${colores[tipo] || colores.info}`;
+      toast.innerHTML = `<i class="fa-solid ${iconos[tipo] || iconos.info} text-sm"></i><span>${mensaje}</span>`;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => toast.remove(), 250);
+      }, 2800);
+    }
+
+    // =========================================================================
+    // 5. NAVEGACIÓN SPA (INICIO <-> CATÁLOGO <-> ARQUITECTURA UML 4+1)
+    // =========================================================================
+    let diagramasMermaidRenderizados = false;
+
+    function navegarA(vista) {
+      const vistaInicio = document.getElementById('vista-inicio');
+      const vistaCatalogo = document.getElementById('vista-catalogo');
+      const vistaDiagramas = document.getElementById('vista-diagramas');
+
+      const navInicio = document.getElementById('nav-inicio');
+      const navCatalogo = document.getElementById('nav-catalogo');
+      const navDiagramas = document.getElementById('nav-diagramas');
+
+      const claseActiva = 'px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 bg-sb-yellow text-sb-navy';
+      const claseInactiva = 'px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 text-slate-300 hover:text-white hover:bg-sb-card';
+
+      vistaInicio.classList.add('hidden');
+      vistaCatalogo.classList.add('hidden');
+      vistaDiagramas.classList.add('hidden');
+
+      navInicio.className = claseInactiva;
+      navCatalogo.className = claseInactiva;
+      navDiagramas.className = claseInactiva;
+
+      if (vista === 'inicio') {
+        vistaInicio.classList.remove('hidden');
+        navInicio.className = claseActiva;
+      } else if (vista === 'catalogo') {
+        vistaCatalogo.classList.remove('hidden');
+        navCatalogo.className = claseActiva;
+        renderizarFiltrosColeccion();
+        filtrarCatalogo();
+      } else if (vista === 'diagramas') {
+        vistaDiagramas.classList.remove('hidden');
+        navDiagramas.className = claseActiva;
+        renderizarSeccionArquitecturaUML();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navegarAColeccion(nombreColeccion) {
+      const col = colecciones.find(c => c.nombre === nombreColeccion);
+      coleccionSeleccionadaId = col ? col.id_coleccion : 'TODAS';
+      navegarA('catalogo');
+    }
+
+    // =========================================================================
+    // 6. RENDERIZADO DE INICIO Y CATÁLOGO (RF01)
+    // =========================================================================
+    function renderizarColeccionesInicio() {
+      const grid = document.getElementById('home-collections-grid');
+      grid.innerHTML = colecciones.map(col => {
+        const cantidadModelos = productos.filter(p => p.id_coleccion === col.id_coleccion).length;
+        return `
+          <div onclick="navegarAColeccion('${col.nombre}')" class="cursor-pointer group bg-sb-card hover:bg-blue-900/80 border-2 border-blue-800 hover:border-sb-yellow rounded-2xl p-6 transition-all flex flex-col justify-between shadow-lg">
+            <div>
+              <div class="w-12 h-12 rounded-xl border flex items-center justify-center text-xl mb-4 ${col.colorBadge} group-hover:scale-110 transition-transform">
+                <i class="fa-solid ${col.icono}"></i>
+              </div>
+              <h3 class="font-display text-lg text-white group-hover:text-sb-yellow transition-colors">${col.nombre}</h3>
+              <p class="text-xs text-slate-300 mt-2 leading-relaxed">${col.descripcion}</p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-blue-800/80 flex items-center justify-between text-xs font-mono">
+              <span class="text-sb-cyan">${cantidadModelos} diseños</span>
+              <span class="text-sb-yellow group-hover:translate-x-1 transition-transform">Explorar →</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderizarFiltrosColeccion() {
+      const container = document.getElementById('filtros-coleccion-container');
+      const btnTodasActivo = coleccionSeleccionadaId === 'TODAS';
+      
+      let html = `
+        <button onclick="seleccionarFiltroColeccion('TODAS')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${btnTodasActivo ? 'bg-sb-yellow text-sb-navy border-sb-yellow shadow-md' : 'bg-sb-card text-slate-300 border-blue-800 hover:border-slate-500'}">
+          Todas
+        </button>
+      `;
+
+      colecciones.forEach(col => {
+        const activo = coleccionSeleccionadaId === col.id_coleccion;
+        html += `
+          <button onclick="seleccionarFiltroColeccion(${col.id_coleccion})" class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 ${activo ? 'bg-sb-yellow text-sb-navy border-sb-yellow shadow-md' : 'bg-sb-card text-slate-300 border-blue-800 hover:border-slate-500'}">
+            <i class="fa-solid ${col.icono}"></i>
+            <span>${col.nombre}</span>
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function seleccionarFiltroColeccion(id) {
+      coleccionSeleccionadaId = id;
+      renderizarFiltrosColeccion();
+      filtrarCatalogo();
+    }
+
+    function resetearFiltros() {
+      document.getElementById('buscador-input').value = '';
+      coleccionSeleccionadaId = 'TODAS';
+      renderizarFiltrosColeccion();
+      filtrarCatalogo();
+    }
+
+    function obtenerPromedioEstrellas(id_producto) {
+      const resenasProd = resenas.filter(r => r.id_producto === id_producto);
+      if (resenasProd.length === 0) return { promedio: '0.0', total: 0 };
+      const suma = resenasProd.reduce((acc, r) => acc + r.calificacion, 0);
+      return {
+        promedio: (suma / resenasProd.length).toFixed(1),
+        total: resenasProd.length
+      };
+    }
+
+    function seleccionarTallaProducto(id_producto, talla) {
+      tallasSeleccionadasPorProducto[id_producto] = talla;
+      filtrarCatalogo();
+    }
+
+    function filtrarCatalogo() {
+      const textoBusqueda = document.getElementById('buscador-input').value.toLowerCase().trim();
+      const grid = document.getElementById('catalogo-grid');
+      const vacio = document.getElementById('catalogo-vacio');
+      const countLabel = document.getElementById('productos-count');
+
+      const filtrados = productos.filter(prod => {
+        const cumpleColeccion = coleccionSeleccionadaId === 'TODAS' || prod.id_coleccion === coleccionSeleccionadaId;
+        const cumpleTexto = prod.nombre.toLowerCase().includes(textoBusqueda) || 
+                            prod.peliculaRef.toLowerCase().includes(textoBusqueda);
+        return cumpleColeccion && cumpleTexto;
+      });
+
+      countLabel.textContent = filtrados.length;
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = '';
+        vacio.classList.remove('hidden');
+        return;
+      }
+
+      vacio.classList.add('hidden');
+
+      grid.innerHTML = filtrados.map(prod => {
+        const coleccion = colecciones.find(c => c.id_coleccion === prod.id_coleccion);
+        const rating = obtenerPromedioEstrellas(prod.id_producto);
+        const tallaActual = tallasSeleccionadasPorProducto[prod.id_producto];
+        const sinStock = prod.stock === 0;
+
+        return `
+          <article class="bg-sb-card border-2 border-blue-900 hover:border-sb-cyan/70 rounded-2xl overflow-hidden flex flex-col justify-between transition-all shadow-lg group">
+            <div>
+              <!-- Imagen + Badges -->
+              <div class="relative overflow-hidden bg-sb-navy aspect-[6/5]">
+                <img src="${prod.imagen_url}" alt="${prod.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                
+                <!-- Badge Colección -->
+                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold border backdrop-blur-md ${coleccion.colorBadge}">
+                  ${coleccion.nombre}
+                </span>
+
+                <!-- Badge Stock Dinámico -->
+                <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold ${sinStock ? 'bg-red-600 text-white' : prod.stock <= 4 ? 'bg-amber-500 text-sb-navy' : 'bg-sb-navy/90 text-sb-cyan border border-sb-cyan/40'}">
+                  ${sinStock ? 'AGOTADO' : `Stock: ${prod.stock}`}
+                </span>
+
+                <!-- Botón Rápido Reseñas -->
+                <button onclick="abrirModalResenas(${prod.id_producto})" class="absolute bottom-3 right-3 bg-sb-navy/90 hover:bg-sb-yellow text-white hover:text-sb-navy border border-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors">
+                  <i class="fa-solid fa-star text-sb-yellow group-hover:text-current"></i>
+                  <span>${rating.promedio}</span>
+                  <span class="text-[10px] opacity-80">(${rating.total})</span>
+                </button>
+              </div>
+
+              <!-- Info Producto -->
+              <div class="p-4 space-y-2">
+                <p class="text-[11px] font-mono text-slate-400 truncate">${prod.peliculaRef}</p>
+                <h3 class="font-bold text-base text-white leading-snug">${prod.nombre}</h3>
+                
+                <!-- Selector de Tallas (S, M, L) -->
+                <div class="pt-1">
+                  <span class="text-[11px] text-slate-400 block mb-1.5">Talla disponible:</span>
+                  <div class="flex items-center gap-2">
+                    ${prod.talla.map(t => `
+                      <button 
+                        type="button"
+                        onclick="seleccionarTallaProducto(${prod.id_producto}, '${t}')"
+                        class="w-9 h-8 rounded-lg font-mono text-xs font-bold border transition-all ${tallaActual === t ? 'bg-sb-cyan text-sb-navy border-sb-cyan' : 'bg-sb-navy text-slate-300 border-blue-800 hover:border-slate-500'}"
+                      >
+                        ${t}
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Precio y Acción Agregar al Carrito -->
+            <div class="p-4 pt-3 border-t border-blue-900/80 flex items-center justify-between gap-2 bg-sb-blue/40">
+              <div>
+                <span class="text-[10px] text-slate-400 block uppercase font-mono">Precio</span>
+                <span class="font-mono font-extrabold text-lg text-sb-yellow">${formatearCLP(prod.precio)}</span>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button 
+                  onclick="abrirModalResenas(${prod.id_producto})" 
+                  title="Ver Detalles y Reseñas"
+                  class="p-2.5 rounded-xl bg-sb-navy hover:bg-blue-900 border border-blue-700 text-sb-cyan text-sm transition-colors"
+                >
+                  <i class="fa-regular fa-comment-dots"></i>
+                </button>
+                <button 
+                  onclick="agregarAlCarrito(${prod.id_producto})" 
+                  ${sinStock ? 'disabled' : ''}
+                  class="px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all ${sinStock ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-sb-yellow hover:bg-yellow-300 text-sb-navy ticket-btn'}"
+                >
+                  <i class="fa-solid fa-cart-plus"></i>
+                  <span>${sinStock ? 'Sin Stock' : 'Agregar'}</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 7. GESTIÓN DEL CARRITO Y CHECKOUT (RF02 - ItemCarrito & Pedido)
+    // =========================================================================
+    function toggleCarrito(abrir) {
+      const overlay = document.getElementById('carrito-overlay');
+      const drawer = document.getElementById('carrito-drawer');
+      if (abrir) {
+        overlay.classList.remove('hidden');
+        drawer.classList.remove('translate-x-full');
+        renderizarCarrito();
+      } else {
+        overlay.classList.add('hidden');
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function agregarAlCarrito(id_producto) {
+      const producto = productos.find(p => p.id_producto === id_producto);
+      if (!producto || producto.stock <= 0) {
+        mostrarToast('Este producto no tiene stock disponible.', 'error');
+        return;
+      }
+
+      const tallaElegida = tallasSeleccionadasPorProducto[id_producto] || 'M';
+      
+      // Calcular cuántas unidades totales de este producto ya están en el carrito (sumando todas las tallas)
+      const cantidadTotalEnCarrito = carrito
+        .filter(item => item.producto.id_producto === id_producto)
+        .reduce((acc, item) => acc + item.cantidad, 0);
+
+      if (cantidadTotalEnCarrito + 1 > producto.stock) {
+        mostrarToast(`Stock máximo alcanzado (${producto.stock} unid. disponibles).`, 'warning');
+        return;
+      }
+
+      // Buscar si ya existe un ItemCarrito con el mismo producto y misma talla
+      const itemExistente = carrito.find(
+        item => item.producto.id_producto === id_producto && item.tallaSeleccionada === tallaElegida
+      );
+
+      if (itemExistente) {
+        itemExistente.cantidad += 1;
+      } else {
+        const nuevoItem = new ItemCarrito(contadorItemCarritoId++, producto, 1, tallaElegida);
+        carrito.push(nuevoItem);
+      }
+
+      actualizarBadgeCarrito();
+      mostrarToast(`Agregado: ${producto.nombre} (Talla ${tallaElegida})`, 'success');
+    }
+
+    function modificarCantidadItem(id_item, delta) {
+      const index = carrito.findIndex(i => i.id_item === id_item);
+      if (index === -1) return;
+
+      const item = carrito[index];
+      const nuevaCantidad = item.cantidad + delta;
+
+      if (nuevaCantidad <= 0) {
+        eliminarItemCarrito(id_item);
+        return;
+      }
+
+      // Validar que la suma total de este producto en el carrito no supere el stock
+      const otrasTallasCantidad = carrito
+        .filter(i => i.producto.id_producto === item.producto.id_producto && i.id_item !== id_item)
+        .reduce((acc, i) => acc + i.cantidad, 0);
+
+      if (nuevaCantidad + otrasTallasCantidad > item.producto.stock) {
+        mostrarToast(`No puedes superar el stock disponible (${item.producto.stock} unid.).`, 'warning');
+        return;
+      }
+
+      item.cantidad = nuevaCantidad;
+      actualizarBadgeCarrito();
+      renderizarCarrito();
+    }
+
+    function eliminarItemCarrito(id_item) {
+      carrito = carrito.filter(i => i.id_item !== id_item);
+      actualizarBadgeCarrito();
+      renderizarCarrito();
+    }
+
+    function actualizarBadgeCarrito() {
+      const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+      document.getElementById('cart-badge').textContent = totalItems;
+    }
+
+    function renderizarCarrito() {
+      const container = document.getElementById('carrito-items-container');
+      const subtotalEl = document.getElementById('cart-subtotal');
+      const totalEl = document.getElementById('cart-total');
+      const btnCheckout = document.getElementById('btn-checkout');
+
+      if (carrito.length === 0) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center py-12 px-4">
+            <div class="w-16 h-16 rounded-2xl bg-sb-card border border-blue-800 flex items-center justify-center text-slate-500 text-2xl mb-3">
+              <i class="fa-solid fa-socks"></i>
+            </div>
+            <h3 class="font-bold text-white text-base">Tu carrito está vacío</h3>
+            <p class="text-xs text-slate-400 mt-1 max-w-xs">Explora nuestras colecciones de cine y series para agregar tus calcetines favoritos.</p>
+          </div>
+        `;
+        subtotalEl.textContent = '$0';
+        totalEl.textContent = '$0';
+        btnCheckout.disabled = true;
+        return;
+      }
+
+      btnCheckout.disabled = false;
+      const totalGeneral = carrito.reduce((acc, item) => acc + item.subtotal(), 0);
+      subtotalEl.textContent = formatearCLP(totalGeneral);
+      totalEl.textContent = formatearCLP(totalGeneral);
+
+      container.innerHTML = carrito.map(item => `
+        <div class="bg-sb-card border border-blue-800 rounded-xl p-3.5 flex items-center gap-3.5">
+          <img src="${item.producto.imagen_url}" alt="${item.producto.nombre}" class="w-16 h-16 rounded-lg object-cover border border-blue-700 shrink-0" />
+          <div class="flex-grow min-w-0">
+            <h4 class="font-bold text-sm text-white truncate">${item.producto.nombre}</h4>
+            <div class="flex items-center gap-2 mt-0.5 text-xs">
+              <span class="bg-sb-navy text-sb-cyan font-mono px-2 py-0.5 rounded border border-blue-800">Talla: ${item.tallaSeleccionada}</span>
+              <span class="text-slate-400 font-mono">${formatearCLP(item.producto.precio)} c/u</span>
+            </div>
+            <div class="flex items-center justify-between mt-2.5">
+              <!-- Controles +/- -->
+              <div class="flex items-center bg-sb-navy rounded-lg border border-blue-800">
+                <button onclick="modificarCantidadItem(${item.id_item}, -1)" class="w-7 h-7 flex items-center justify-center text-slate-300 hover:text-sb-yellow font-bold">-</button>
+                <span class="px-2.5 font-mono text-xs font-bold text-white">${item.cantidad}</span>
+                <button onclick="modificarCantidadItem(${item.id_item}, 1)" class="w-7 h-7 flex items-center justify-center text-slate-300 hover:text-sb-yellow font-bold">+</button>
+              </div>
+              <span class="font-mono font-bold text-sm text-sb-yellow">${formatearCLP(item.subtotal())}</span>
+            </div>
+          </div>
+          <button onclick="eliminarItemCarrito(${item.id_item})" title="Eliminar" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function ejecutarCheckout() {
+      if (carrito.length === 0) return;
+
+      // Instanciar clase Pedido según UML
+      const nuevoPedido = new Pedido(historialPedidos.length + 1, carrito);
+      nuevoPedido.procesarCheckout(carrito);
+      historialPedidos.push(nuevoPedido);
+
+      // Limpiar carrito y actualizar vistas
+      carrito = [];
+      actualizarBadgeCarrito();
+      toggleCarrito(false);
+      filtrarCatalogo(); // Refresca el stock en las tarjetas del catálogo
+
+      // Mostrar Comprobante Modal
+      mostrarComprobantePedido(nuevoPedido);
+    }
+
+    function mostrarComprobantePedido(pedido) {
+      const modal = document.getElementById('modal-pedido');
+      const contenido = document.getElementById('pedido-detalle-contenido');
+
+      const fechaFormateada = pedido.fecha.toLocaleString('es-CL', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      });
+
+      contenido.innerHTML = `
+        <div class="bg-sb-card p-3.5 rounded-xl border border-blue-800 space-y-1.5 font-mono text-xs">
+          <div class="flex justify-between">
+            <span class="text-slate-400">ID Único Pedido:</span>
+            <span class="text-sb-yellow font-bold text-sm">${pedido.identificador_unico}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Fecha Emisión:</span>
+            <span class="text-white">${fechaFormateada}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Estado:</span>
+            <span class="text-emerald-400 font-bold">${pedido.estado}</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 max-h-40 overflow-y-auto pr-1">
+          <span class="text-xs font-bold text-slate-300 uppercase">Detalle de Productos:</span>
+          ${pedido.items.map(it => `
+            <div class="flex justify-between items-center text-xs bg-sb-blue/50 px-3 py-2 rounded-lg border border-blue-900">
+              <div>
+                <span class="text-white font-semibold">${it.cantidad}x ${it.nombre}</span>
+                <span class="text-sb-cyan font-mono ml-1">(Talla ${it.talla})</span>
+              </div>
+              <span class="font-mono text-slate-200">${formatearCLP(it.subtotal)}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="flex justify-between items-center pt-3 border-t-2 border-dashed border-sb-yellow/50 text-base font-extrabold">
+          <span class="text-white">TOTAL PAGADO:</span>
+          <span class="font-mono text-xl text-sb-yellow">${formatearCLP(pedido.total)}</span>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function cerrarModalPedido() {
+      const modal = document.getElementById('modal-pedido');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // =========================================================================
+    // 8. GESTIÓN DE RESEÑAS DE FANÁTICOS (RF04 - Clase Resena)
+    // =========================================================================
+    function abrirModalResenas(id_producto) {
+      const producto = productos.find(p => p.id_producto === id_producto);
+      if (!producto) return;
+
+      productoActivoModalResena = producto;
+      const modal = document.getElementById('modal-resenas');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      renderizarContenidoModalResenas();
+    }
+
+    function cerrarModalResenas() {
+      const modal = document.getElementById('modal-resenas');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      productoActivoModalResena = null;
+    }
+
+    function renderizarContenidoModalResenas() {
+      if (!productoActivoModalResena) return;
+      const prod = productoActivoModalResena;
+      const coleccion = colecciones.find(c => c.id_coleccion === prod.id_coleccion);
+      const rating = obtenerPromedioEstrellas(prod.id_producto);
+      const resenasProducto = resenas.filter(r => r.id_producto === prod.id_producto).reverse();
+
+      document.getElementById('modal-resena-titulo').textContent = prod.nombre;
+      document.getElementById('modal-resena-contador').textContent = `${resenasProducto.length} reseña(s)`;
+
+      document.getElementById('modal-resena-producto-info').innerHTML = `
+        <img src="${prod.imagen_url}" alt="${prod.nombre}" class="w-24 h-24 rounded-xl object-cover border-2 border-sb-cyan/50 shrink-0" />
+        <div class="space-y-1 text-center sm:text-left flex-grow">
+          <span class="text-[11px] font-bold px-2 py-0.5 rounded border ${coleccion.colorBadge}">${coleccion.nombre}</span>
+          <h4 class="font-bold text-lg text-white">${prod.nombre}</h4>
+          <p class="text-xs text-slate-400">${prod.peliculaRef}</p>
+          <div class="flex items-center justify-center sm:justify-start gap-3 pt-1">
+            <span class="font-mono font-extrabold text-sb-yellow text-base">${formatearCLP(prod.precio)}</span>
+            <span class="text-xs font-bold text-sb-yellow bg-sb-navy px-2.5 py-0.5 rounded-lg border border-blue-800">
+              ★ ${rating.promedio} / 5.0
+            </span>
+          </div>
+        </div>
+      `;
+
+      const listaContainer = document.getElementById('lista-resenas-container');
+      if (resenasProducto.length === 0) {
+        listaContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-6 bg-sb-card/40 rounded-xl">Aún no hay reseñas para este modelo. ¡Sé el primero en comentar!</p>`;
+        return;
+      }
+
+      listaContainer.innerHTML = resenasProducto.map(r => {
+        const estrellasLlenas = '★'.repeat(r.calificacion);
+        const estrellasVacias = '☆'.repeat(5 - r.calificacion);
+        const fechaStr = r.fecha.toLocaleDateString('es-CL');
+        return `
+          <div class="bg-sb-card/80 border border-blue-900 rounded-xl p-3.5 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-full bg-sb-blue border border-sb-cyan/50 flex items-center justify-center text-xs font-bold text-sb-cyan">
+                  ${r.autor.charAt(0).toUpperCase()}
+                </div>
+                <span class="font-bold text-xs text-white">${r.autor}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-sb-yellow text-xs tracking-wider">${estrellasLlenas}<span class="text-slate-600">${estrellasVacias}</span></span>
+                <span class="text-[10px] font-mono text-slate-500 block">${fechaStr}</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed pl-9">${r.comentario}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function enviarResena(event) {
+      event.preventDefault();
+      if (!productoActivoModalResena) return;
+
+      const autorInput = document.getElementById('resena-autor');
+      const calificacionInput = document.getElementById('resena-calificacion');
+      const comentarioInput = document.getElementById('resena-comentario');
+
+      const nuevaResena = new Resena(
+        contadorResenaId++,
+        productoActivoModalResena.id_producto,
+        autorInput.value.trim(),
+        calificacionInput.value,
+        comentarioInput.value.trim(),
+        new Date()
+      );
+
+      resenas.push(nuevaResena);
+
+      // Limpiar formulario
+      autorInput.value = '';
+      comentarioInput.value = '';
+      calificacionInput.value = '5';
+
+      // Actualizar vista del modal y tarjetas del catálogo en tiempo real
+      renderizarContenidoModalResenas();
+      filtrarCatalogo();
+      mostrarToast('¡Tu reseña ha sido publicada!', 'success');
+    }
+
+    // =========================================================================
+    // 9. RENDERIZADO DE DOCUMENTACIÓN ARQUITECTURA 4+1 (MERMAID + PLANTUML)
+    // =========================================================================
+    const vistasArquitectura41 = [
+      {
+        id: 'vista-41-logica',
+        numero: 'VISTA 01',
+        criterio: 'Criterio 2.1.2',
+        titulo: 'Vista Lógica (Diagrama de Clases)',
+        subtitulo: 'Estructura estática del dominio, herencia de usuarios y relaciones de multiplicidad.',
+        rfRelacionados: ['RF01', 'RF02', 'RF03', 'RF04'],
+        descripcion: 'Define el modelo conceptual y orientado a objetos de Sockbuster Video & Socks. Establece la jerarquía de herencia desde Usuario hacia Cliente y Administrador, la agrupación de Producto dentro de Coleccion (RF01), la composición de Pedido mediante ItemCarrito (RF02) y la asociación de Resena con clientes y productos (RF04).',
+        mermaidCode: `classDiagram
+    class Usuario {
+        +int id_usuario
+        +String nombre
+        +String correo
+        +String password_hash
+        +String rol
+        +login()
+        +registrar()
+    }
+    class Cliente {
+        +verCatalogo()
+        +gestionarCarrito()
+    }
+    class Administrador {
+        +gestionarInventario()
+        +actualizarStock()
+    }
+    class Coleccion {
+        +int id_coleccion
+        +String nombre
+        +String descripcion
+    }
+    class Producto {
+        +int id_producto
+        +String nombre
+        +double precio
+        +int stock
+        +String talla
+        +String imagen_url
+    }
+    class ItemCarrito {
+        +int id_item
+        +int cantidad
+        +double subtotal()
+    }
+    class Pedido {
+        +int id_pedido
+        +String identificador_unico
+        +double total
+        +String estado
+        +DateTime fecha
+        +procesarCheckout()
+    }
+    class Resena {
+        +int id_resena
+        +int calificacion
+        +String comentario
+        +DateTime fecha
+    }
+
+    Usuario <|-- Cliente
+    Usuario <|-- Administrador
+    Coleccion "1" -- "*" Producto : contiene
+    Producto "1" -- "*" ItemCarrito : incluye
+    Cliente "1" -- "*" Pedido : realiza
+    Pedido "1" -- "*" ItemCarrito : agrupa
+    Cliente "1" -- "*" Resena : escribe
+    Producto "1" -- "*" Resena : recibe`,
+        plantumlCode: `@startuml
+skinparam classAttributeIconSize 0
+
+class Usuario {
+  +int id_usuario
+  +String nombre
+  +String correo
+  +String password_hash
+  +String rol
+  +login()
+  +registrar()
+}
+
+class Cliente {
+  +verCatalogo()
+  +gestionarCarrito()
+}
+
+class Administrador {
+  +gestionarInventario()
+  +actualizarStock()
+}
+
+class Coleccion {
+  +int id_coleccion
+  +String nombre
+  +String descripcion
+}
+
+class Producto {
+  +int id_producto
+  +String nombre
+  +double precio
+  +int stock
+  +String talla
+  +String imagen_url
+}
+
+class ItemCarrito {
+  +int id_item
+  +int cantidad
+  +double subtotal()
+}
+
+class Pedido {
+  +int id_pedido
+  +String identificador_unico
+  +double total
+  +String estado
+  +DateTime fecha
+  +procesarCheckout()
+}
+
+class Resena {
+  +int id_resena
+  +int calificacion
+  +String comentario
+  +DateTime fecha
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Administrador
+Coleccion "1" -- "*" Producto : contiene >
+Producto "1" -- "*" ItemCarrito : incluye >
+Cliente "1" -- "*" Pedido : realiza >
+Pedido "1" -- "*" ItemCarrito : agrupa >
+Cliente "1" -- "*" Resena : escribe >
+Producto "1" -- "*" Resena : recibe >
+
+@enduml`
+      },
+      {
+        id: 'vista-41-desarrollo',
+        numero: 'VISTA 02',
+        criterio: 'Criterio 2.1.3',
+        titulo: 'Vista de Desarrollo / Implementación (Diagrama de Componentes)',
+        subtitulo: 'Organización modular del código fuente, dependencias frontend, API REST y persistencia.',
+        rfRelacionados: ['RF01', 'RF02', 'RF03', 'RNF01', 'RNF02'],
+        descripcion: 'Detalla la arquitectura de software desde la perspectiva del programador. Separa las vistas de presentación (index.html, catalogo.html, diagramas.html) y los módulos lógicos en JavaScript (Gestor de Catálogo, Carrito/Checkout y Controlador JWT) de los servicios Backend API REST y la Base de Datos Relacional.',
+        mermaidCode: `flowchart LR
+    subgraph FE["Frontend Web (Hosting Cloud)"]
+        Index["index.html"]
+        Catalogo["catalogo.html"]
+        Diagramas["diagramas.html"]
+        subgraph MOD["Módulos JS / Assets"]
+            ModCatalogo["Gestor de Catálogo y Filtros"]
+            ModCarrito["Carrito y Checkout Script"]
+            ModAuth["Controlador JWT Auth"]
+        end
+    end
+
+    subgraph BE["Backend / API Services"]
+        ApiRest["API REST (Node.js / Python)"]
+        MwJwt["Middleware Autenticación JWT"]
+    end
+
+    subgraph DB["Base de Datos Relacional"]
+        SQL[("PostgreSQL / MySQL")]
+    end
+
+    Index --> ModCatalogo
+    Catalogo --> ModCatalogo
+    Catalogo --> ModCarrito
+    Diagramas --> Index
+    ModCatalogo -->|HTTP / AJAX| ApiRest
+    ModCarrito -->|HTTP / AJAX| ApiRest
+    ModAuth -->|Valida Token| MwJwt
+    MwJwt --> ApiRest
+    ApiRest -->|Consultas SQL| SQL`,
+        plantumlCode: `@startuml
+left to right direction
+
+package "Frontend Web (Hosting Cloud)" {
+  [index.html] as Index
+  [catalogo.html] as Catalogo
+  [diagramas.html] as Diagramas
+  
+  package "Módulos JS / Assets" {
+    [Gestor de Catálogo y Filtros] as ModCatalogo
+    [Carrito y Checkout Script] as ModCarrito
+    [Controlador JWT Auth] as ModAuth
+  }
+}
+
+package "Backend / API Services" {
+  [API REST (Node.js / Python)] as ApiRest
+  [Middleware Autenticación JWT] as MwJwt
+}
+
+database "Base de Datos Relacional" {
+  [PostgreSQL / MySQL] as DB
+}
+
+Index --> ModCatalogo
+Catalogo --> ModCatalogo
+Catalogo --> ModCarrito
+Diagramas --> Index
+ModCatalogo --> ApiRest : HTTP / AJAX
+ModCarrito --> ApiRest : HTTP / AJAX
+ModAuth --> MwJwt : Valida Token
+ApiRest --> DB : Consultas SQL
+
+@enduml`
+      },
+      {
+        id: 'vista-41-procesos',
+        numero: 'VISTA 03',
+        criterio: 'Criterio 2.1.4',
+        titulo: 'Vista de Procesos (Diagrama de Secuencia - Carrito y Checkout)',
+        subtitulo: 'Dinámica de ejecución, sincronización y flujo transaccional para el proceso de compra (RF02).',
+        rfRelacionados: ['RF02'],
+        descripcion: 'Modela el comportamiento en tiempo de ejecución desde que el Cliente selecciona un calcetín y talla hasta la confirmación final del pedido. Ilustra la actualización del estado local en el Módulo Carrito, la validación de stock disponible en la Base de Datos y la emisión del comprobante con identificador único.',
+        mermaidCode: `sequenceDiagram
+    autonumber
+    actor Cliente
+    participant UI as Interfaz Web (catalogo.html)
+    participant Cart as Módulo Carrito
+    participant API as API Backend
+    participant DB as Base de Datos
+
+    Cliente->>UI: Selecciona producto y talla, clic "Agregar al Carrito"
+    UI->>Cart: Actualiza estado local / LocalStorage
+    Cliente->>UI: Hace clic en "Finalizar Compra (Checkout)"
+    UI->>Cart: Solicita resumen del pedido
+    Cart->>API: POST /api/pedidos (productos, datos cliente, token)
+    API->>DB: Verificar stock disponible
+    DB-->>API: Stock confirmado
+    API->>DB: Registrar pedido y generar identificador único
+    DB-->>API: Confirmación de registro
+    API-->>Cart: Retorna resumen y ID único de pedido
+    Cart-->>UI: Muestra pantalla de éxito con ID de pedido
+    UI-->>Cliente: Presenta comprobante de compra`,
+        plantumlCode: `@startuml
+autonumber
+actor Cliente
+participant "Interfaz Web\\n(catalogo.html)" as UI
+participant "Módulo Carrito" as Cart
+participant "API Backend" as API
+database "Base de Datos" as DB
+
+Cliente -> UI: Selecciona producto y talla, clic "Agregar al Carrito"
+UI -> Cart: Actualiza estado local / LocalStorage
+Cliente -> UI: Hace clic en "Finalizar Compra (Checkout)"
+UI -> Cart: Solicita resumen del pedido
+Cart -> API: POST /api/pedidos (productos, datos cliente, token)
+API -> DB: Verificar stock disponible
+DB --> API: Stock confirmado
+API -> DB: Registrar pedido y generar identificador único
+DB --> API: Confirmación de registro
+API --> Cart: Retorna resumen y ID único de pedido
+Cart --> UI: Muestra pantalla de éxito con ID de pedido
+UI --> Cliente: Presenta comprobante de compra
+@enduml`
+      },
+      {
+        id: 'vista-41-fisica',
+        numero: 'VISTA 04',
+        criterio: 'Criterio 2.1.5',
+        titulo: 'Vista Física / Despliegue (Diagrama de Despliegue)',
+        subtitulo: 'Topología de nodos en la nube, comunicación segura HTTPS y entornos de alojamiento.',
+        rfRelacionados: ['RNF01', 'RNF02'],
+        descripcion: 'Representa la distribución física del software sobre infraestructura Cloud. Cumple con RNF01 garantizando alta disponibilidad y carga rápida mediante Hosting Estático (GitHub Pages / Vercel / Netlify) y cumple con RNF02 asegurando el tráfico cifrado bajo protocolo HTTPS entre el navegador del cliente, el servidor de aplicaciones (Render) y la base de datos en la nube.',
+        mermaidCode: `flowchart LR
+    subgraph CLIENTE["Dispositivo del Cliente"]
+        subgraph BROWSER["Navegador Web"]
+            Art1["index.html"]
+            Art2["catalogo.html"]
+            Art3["diagramas.html"]
+        end
+    end
+
+    NET(("Internet<br/>Protocolo HTTPS<br/>RNF01 / RNF02"))
+
+    subgraph CLOUD_FRONT["Entorno Cloud / Hosting Estático<br/>(GitHub Pages / Vercel / Netlify)"]
+        Static["Archivos Estáticos Frontend<br/>(HTML, CSS, JS)"]
+    end
+
+    subgraph CLOUD_BACK["Servidor de Aplicaciones / Backend<br/>(Render / Heroku)"]
+        Runtime["Node.js / Python Runtime"]
+        ApiCore["API Core & JWT Auth"]
+    end
+
+    subgraph CLOUD_DB["Servicio de Base de Datos<br/>(Supabase / Cloud DB)"]
+        Tablas[("Tablas Relacionales:<br/>Productos, Usuarios, Pedidos")]
+    end
+
+    BROWSER -->|HTTPS| NET
+    NET -->|Solicita vistas| Static
+    Static -->|Peticiones Fetch / AJAX| ApiCore
+    Runtime --- ApiCore
+    ApiCore -->|SQL Conexión Segura| Tablas`,
+        plantumlCode: `@startuml
+left to right direction
+node "Dispositivo del Cliente" {
+  node "Navegador Web" {
+    artifact "index.html"
+    artifact "catalogo.html"
+    artifact "diagramas.html"
+  }
+}
+
+cloud "Internet (Protocolo HTTPS / RNF01 - RNF02)" {
+}
+
+node "Entorno Cloud / Hosting Estático\\n(GitHub Pages / Vercel / Netlify)" {
+  component "Archivos Estáticos Frontend\\n(HTML, CSS, JS)"
+}
+
+node "Servidor de Aplicaciones / Backend\\n(Render / Heroku)" {
+  component "Node.js / Python Runtime"
+  component "API Core & JWT Auth"
+}
+
+database "Servicio de Base de Datos\\n(Supabase / Cloud DB)" {
+  folder "Datos Relacionales" {
+    [Tablas: Productos, Usuarios, Pedidos]
+  }
+}
+
+"Navegador Web" --> "Internet" : HTTPS
+"Internet" --> "Hosting Estático" : Solicita vistas
+"Hosting Estático" --> "API Core & JWT Auth" : Peticiones Fetch / AJAX
+"API Core & JWT Auth" --> [Tablas: Productos, Usuarios, Pedidos] : SQL Conexión segura
+
+@enduml`
+      },
+      {
+        id: 'vista-41-escenarios',
+        numero: 'VISTA 05',
+        criterio: 'Criterio 2.1.6',
+        titulo: 'Escenarios / 5ta Vista (Diagrama de Casos de Uso)',
+        subtitulo: 'Validación funcional mediante actores, casos de uso del sistema y relaciones de inclusión.',
+        rfRelacionados: ['RF01', 'RF02', 'RF03', 'RF04', 'RNF02'],
+        descripcion: 'Articula y valida las cuatro vistas anteriores desde la perspectiva del usuario final y los procesos de negocio. Diferencia los permisos de Cliente No Registrado (exploración y carrito), Usuario Registrado (publicación de reseñas RF04) y Administrador (gestión de inventario RF03 con inclusión obligatoria de autenticación JWT RNF02).',
+        mermaidCode: `flowchart LR
+    Cliente(["👤 Cliente /<br/>No Registrado"])
+    RegUser(["👤 Usuario<br/>Registrado"])
+    Admin(["🛡️ Administrador"])
+
+    subgraph SYS["Sistema Sockbuster Video & Socks"]
+        UC1(["RF01: Explorar y Filtrar Catálogo<br/>por Colecciones Temáticas"])
+        UC2(["RF02: Gestionar Carrito y<br/>Simular Checkout"])
+        UC3(["RF04: Publicar Reseñas y<br/>Valoraciones 1-5★"])
+        UC4(["RNF02: Autenticarse con<br/>Token JWT"])
+        UC5(["RF03: Registrar e Inventariar<br/>Productos y Precios"])
+    end
+
+    Cliente --> UC1
+    Cliente --> UC2
+
+    RegUser --> UC1
+    RegUser --> UC2
+    RegUser --> UC3
+
+    Admin --> UC4
+    Admin --> UC5
+    UC5 -.->|"&lt;&lt;include&gt;&gt;"| UC4`,
+        plantumlCode: `@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Cliente / Usuario No Registrado" as Cliente
+actor "Usuario Registrado" as RegUser
+actor "Administrador" as Admin
+
+rectangle "Sistema Sockbuster Video & Socks" {
+  usecase "RF01: Explorar y Filtrar Catálogo\\npor Colecciones Temáticas" as UC1
+  usecase "RF02: Gestionar Carrito y\\nSimular Checkout" as UC2
+  usecase "RF04: Publicar Reseñas y\\nValoraciones (1-5★)" as UC3
+  usecase "RNF02: Autenticarse con Token JWT" as UC4
+  usecase "RF03: Registrar e Inventariar\\nProductos y Precios" as UC5
+}
+
+Cliente --> UC1
+Cliente --> UC2
+
+RegUser --> UC1
+RegUser --> UC2
+RegUser --> UC3
+
+Admin --> UC4
+Admin --> UC5
+UC5 ..> UC4 : <<include>>
+
+@enduml`
+      }
+    ];
+
+    function escaparHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function toggleBloquePlantUml(index) {
+      const bloque = document.getElementById(`plantuml-box-${index}`);
+      const textoBtn = document.getElementById(`plantuml-toggle-text-${index}`);
+      if (!bloque) return;
+
+      const estaOculto = bloque.classList.contains('hidden');
+      if (estaOculto) {
+        bloque.classList.remove('hidden');
+        textoBtn.textContent = 'Ocultar código PlantUML';
+      } else {
+        bloque.classList.add('hidden');
+        textoBtn.textContent = 'Ver código fuente PlantUML';
+      }
+    }
+
+    function copiarCodigoPlantUml(index) {
+      const vista = vistasArquitectura41[index];
+      if (!vista) return;
+
+      const textareaTemp = document.createElement('textarea');
+      textareaTemp.value = vista.plantumlCode;
+      textareaTemp.style.position = 'fixed';
+      textareaTemp.style.opacity = '0';
+      document.body.appendChild(textareaTemp);
+      textareaTemp.select();
+
+      try {
+        document.execCommand('copy');
+        mostrarToast(`Código PlantUML de "${vista.titulo}" copiado al portapapeles.`, 'success');
+      } catch (err) {
+        mostrarToast('No se pudo copiar el código automáticamente.', 'error');
+      } finally {
+        document.body.removeChild(textareaTemp);
+      }
+    }
+
+    async function renderizarSeccionArquitecturaUML() {
+      const contenedor = document.getElementById('contenedor-vistas-uml');
+      if (!contenedor) return;
+
+      if (!diagramasMermaidRenderizados) {
+        contenedor.innerHTML = vistasArquitectura41.map((v, idx) => `
+          <article id="${v.id}" class="bg-sb-card/90 border-2 border-blue-800/90 hover:border-sb-cyan/50 rounded-2xl overflow-hidden shadow-xl transition-colors scroll-mt-24">
+            <!-- Cabecera de la Vista -->
+            <div class="p-5 sm:p-6 bg-sb-blue border-b border-blue-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span class="px-2.5 py-0.5 rounded bg-sb-yellow text-sb-navy font-mono font-extrabold text-xs">${v.numero}</span>
+                  <span class="px-2.5 py-0.5 rounded bg-sb-navy border border-sb-cyan/50 text-sb-cyan font-mono text-xs">${v.criterio}</span>
+                  ${v.rfRelacionados.map(rf => `
+                    <span class="px-2 py-0.5 rounded bg-blue-950 border border-blue-700 text-slate-300 font-mono text-[11px]">${rf}</span>
+                  `).join('')}
+                </div>
+                <h2 class="font-display text-xl sm:text-2xl text-white">${v.titulo}</h2>
+                <p class="text-xs sm:text-sm text-sb-cyan/90 mt-0.5">${v.subtitulo}</p>
+              </div>
+
+              <!-- Controles PlantUML -->
+              <div class="flex flex-wrap items-center gap-2 shrink-0">
+                <button 
+                  type="button"
+                  onclick="toggleBloquePlantUml(${idx})"
+                  class="px-3.5 py-2 rounded-xl bg-sb-navy hover:bg-blue-950 border border-blue-700 text-slate-200 font-semibold text-xs flex items-center gap-2 transition-colors"
+                >
+                  <i class="fa-solid fa-code text-sb-cyan"></i>
+                  <span id="plantuml-toggle-text-${idx}">Ver código fuente PlantUML</span>
+                </button>
+                <button 
+                  type="button"
+                  onclick="copiarCodigoPlantUml(${idx})"
+                  class="px-3.5 py-2 rounded-xl bg-sb-yellow hover:bg-yellow-300 text-sb-navy font-bold text-xs flex items-center gap-1.5 ticket-btn"
+                >
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Copiar PlantUML</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Explicación Técnica -->
+            <div class="px-5 sm:px-6 pt-5">
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-sb-navy/60 p-4 rounded-xl border border-blue-900/80">
+                <i class="fa-solid fa-circle-info text-sb-yellow mr-1.5"></i>
+                ${v.descripcion}
+              </p>
+            </div>
+
+            <!-- Bloque Desplegable Código PlantUML -->
+            <div id="plantuml-box-${idx}" class="hidden px-5 sm:px-6 pt-4">
+              <div class="bg-[#050914] border border-sb-cyan/40 rounded-xl overflow-hidden">
+                <div class="px-4 py-2 bg-sb-navy border-b border-blue-900 flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span><i class="fa-solid fa-file-code text-sb-yellow mr-1.5"></i>Especificación Declarativa (.puml)</span>
+                  <button type="button" onclick="copiarCodigoPlantUml(${idx})" class="text-sb-cyan hover:underline">Copiar bloque</button>
+                </div>
+                <pre class="p-4 text-xs font-mono text-emerald-300 overflow-x-auto leading-relaxed"><code>${escaparHtml(v.plantumlCode)}</code></pre>
+              </div>
+            </div>
+
+            <!-- Lienzo de Renderizado Vectorial UML (Mermaid) -->
+            <div class="p-5 sm:p-6">
+              <div class="bg-[#060B19] border border-blue-900/90 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center items-center min-h-[260px]">
+                <pre class="mermaid w-full flex justify-center">${v.mermaidCode}</pre>
+              </div>
+            </div>
+          </article>
+        `).join('');
+
+        if (typeof mermaid !== 'undefined') {
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            securityLevel: 'loose',
+            themeVariables: {
+              darkMode: true,
+              background: '#060B19',
+              primaryColor: '#13234D',
+              primaryTextColor: '#F8FAFC',
+              primaryBorderColor: '#FFD100',
+              lineColor: '#00F0FF',
+              secondaryColor: '#0E1B3D',
+              tertiaryColor: '#1E3A8A',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '13px',
+              actorBkg: '#0E1B3D',
+              actorBorder: '#FFD100',
+              actorTextColor: '#FFD100',
+              signalColor: '#00F0FF',
+              signalTextColor: '#F8FAFC',
+              labelBoxBkgColor: '#0E1B3D',
+              labelBoxBorderColor: '#00F0FF',
+              labelTextColor: '#FFD100',
+              loopTextColor: '#00F0FF',
+              noteBkgColor: '#13234D',
+              noteBorderColor: '#FFD100',
+              noteTextColor: '#F8FAFC',
+              classText: '#F8FAFC'
+            }
+          });
+
+          try {
+            await mermaid.run({
+              querySelector: '#contenedor-vistas-uml .mermaid'
+            });
+            diagramasMermaidRenderizados = true;
+          } catch (error) {
+            console.error('Error al renderizar diagramas Mermaid:', error);
+          }
+        }
+      }
+    }
+
+    // =========================================================================
+    // 10. INICIALIZACIÓN AL CARGAR LA PÁGINA
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      renderizarColeccionesInicio();
+      renderizarFiltrosColeccion();
+      filtrarCatalogo();
+    });
+  </script>
+</body>
+</html>
